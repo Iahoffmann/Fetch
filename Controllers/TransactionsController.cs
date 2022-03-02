@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fetch.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class TransactionsController : ControllerBase
     {
-        private ITransactionService _transactionService;
+        private readonly ITransactionService _transactionService;
 
         public TransactionsController(ITransactionService transactionService)
         {
@@ -34,7 +34,7 @@ namespace Fetch.Controllers
         [HttpPost]
         public IEnumerable<PayerPoints> Spend(SpendRequest request)
         {
-
+            return _transactionService.Spend(request.Points);
         }
 
         /// <summary>

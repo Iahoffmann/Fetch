@@ -9,6 +9,6 @@ namespace Fetch.Services
 
         IDictionary<string, int> GetGroupedPayerPoints();
 
-        IEnumerable<Transaction> GetAll();
+        IEnumerable<PayerPoints> Spend(int points);
     }
 }

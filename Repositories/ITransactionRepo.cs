@@ -7,5 +7,6 @@ namespace Fetch.Repositories
     {
         void Add(Transaction transaction);
         IEnumerable<Transaction> GetAll();
+        IEnumerable<PayerPoints> Spend(int points);
     }
 }
