@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Fetch.Models;
+using Fetch.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fetch.Controllers
@@ -8,6 +9,13 @@ namespace Fetch.Controllers
     [Route("[controller]")]
     public class TransactionsController : ControllerBase
     {
+        private ITransactionService _transactionService;
+
+        public TransactionsController(ITransactionService transactionService)
+        {
+            _transactionService = transactionService;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -15,7 +23,7 @@ namespace Fetch.Controllers
         [HttpPost]
         public void AddTransaction(Transaction transaction)
         {
-
+            _transactionService.Add(transaction);
         }
 
         /// <summary>
@@ -34,9 +42,9 @@ namespace Fetch.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Transaction> GetAll()
+        public IDictionary<string, int> GetPayerPointTotals()
         {
-
+            return _transactionService.GetGroupedPayerPoints();
         }
     }
 }

@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fetch.Repositories;
+using Fetch.Services;
 using Microsoft.OpenApi.Models;
 
 namespace Fetch
@@ -29,6 +31,9 @@ namespace Fetch
             services.AddSwaggerGen(
                 c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Fetch API", Version = "v1" })
             );
+
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddSingleton<ITransactionRepo, TransactionRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
