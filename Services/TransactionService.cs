@@ -24,7 +24,7 @@ namespace Fetch.Services
         {
             return _transactionRepo.GetAll()
                                    .GroupBy(transaction => transaction.Payer)
-                                   .ToDictionary(grouping => grouping.Key, grouping => grouping.Sum(transaction => transaction.Points));
+                                   .ToDictionary(grouping => grouping.Key, grouping => grouping.Sum(transaction => transaction.PointsRunningTotal));
         }
 
         public IEnumerable<PayerPoints> Spend(int points) => _transactionRepo.Spend(points);
