@@ -64,14 +64,22 @@ namespace Fetch.Repositories
 
             List<Transaction> spentTransactions = _transactions.TakeWhile(pair =>
                 {
-                    (DateTime _, Transaction transaction) = pair;
+                    (DateTime _key, Transaction transaction) = pair;
                     if (points - transaction.Points >= 0)
                     {
                         points -= transaction.Points;
                         return true;
                     }
 
-                    if(points - transaction.Points < 0) partiallySpentTransaction = transaction;
+                    if (points - transaction.Points < 0)
+                    {
+                        partiallySpentTransaction = new Transaction
+                        {
+                            Payer = transaction.Payer,
+                            Points = transaction.Points,
+                            TimeStamp = transaction.TimeStamp
+                        };
+                    }
                     return false;
                 })
                 .Select(pair => pair.Value)
@@ -92,7 +100,7 @@ namespace Fetch.Repositories
                                         grouping => new PayerPoints
                                         {
                                             Payer = grouping.Key,
-                                            Points = grouping.Sum(transaction => transaction.Points)
+                                            Points = grouping.Sum(transaction => transaction.Points) * -1
                                         }
                                     );
         }
