@@ -17,7 +17,7 @@ namespace Fetch.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Used to add transactions
         /// </summary>
         /// <param name="transaction"></param>
         [HttpPost]
@@ -27,10 +27,10 @@ namespace Fetch.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Used to spend points
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="request">A small transfer object to help clarify the naming</param>
+        /// <returns>A list of Payers and the amount of points used in this spend action</returns>
         [HttpPost]
         public IEnumerable<PayerPoints> Spend(SpendRequest request)
         {
@@ -38,9 +38,9 @@ namespace Fetch.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Used to get a summary of all payers and there current point totals
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of Payers and current point totals</returns>
         [HttpGet]
         public IDictionary<string, int> GetPayerPointTotals()
         {
