@@ -22,7 +22,7 @@ namespace Fetch.Services
 
         public IDictionary<string, int> GetGroupedPayerPoints()
         {
-            return _transactionRepo.GetAll()
+            return _transactionRepo.getAllRunningTotals()
                                    .GroupBy(transaction => transaction.Payer)
                                    .ToDictionary(grouping => grouping.Key, grouping => grouping.Sum(transaction => transaction.PointsRunningTotal));
         }

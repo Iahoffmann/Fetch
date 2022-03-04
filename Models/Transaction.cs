@@ -8,8 +8,6 @@ namespace Fetch.Models
 
         public int Points { get; set; }
 
-        public int PointsRunningTotal { get; set; }
-
         public DateTime TimeStamp { get; set; }
     }
 }
