@@ -16,6 +16,7 @@ namespace Fetch.Repositories
 
         public void Add(Transaction transaction)
         {
+            //TODO add collision handling
             _transactions.Add(transaction.TimeStamp, transaction);
         }
 
@@ -59,10 +60,41 @@ namespace Fetch.Repositories
 
             testTransactions.ForEach(x => _transactions.Add(x.TimeStamp, x));
             //TODO Remove these after testing
+            Transaction partiallySpentTransaction = null;
 
-            var x = _transactions.Values;
+            List<Transaction> spentTransactions = _transactions.TakeWhile(pair =>
+                {
+                    (DateTime _, Transaction transaction) = pair;
+                    if (points - transaction.Points >= 0)
+                    {
+                        points -= transaction.Points;
+                        return true;
+                    }
 
-            return new List<PayerPoints>();
+                    if(points - transaction.Points < 0) partiallySpentTransaction = transaction;
+                    return false;
+                })
+                .Select(pair => pair.Value)
+                .ToList();
+            
+            spentTransactions.ForEach(transaction => _transactions.Remove(transaction.TimeStamp));
+
+            if (partiallySpentTransaction != null)
+            {
+                // Uses the remaining points as it's total
+                partiallySpentTransaction.Points = points;
+                _transactions[partiallySpentTransaction.TimeStamp].Points -= points;
+                spentTransactions.Add(partiallySpentTransaction);
+            }
+
+            return spentTransactions.GroupBy(transaction => transaction.Payer)
+                                    .Select(
+                                        grouping => new PayerPoints
+                                        {
+                                            Payer = grouping.Key,
+                                            Points = grouping.Sum(transaction => transaction.Points)
+                                        }
+                                    );
         }
     }
 }
